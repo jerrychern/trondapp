@@ -1,0 +1,10 @@
+2019-06-05 23:05:20,413 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 24044 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-05 23:05:20,422 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.10.RELEASE, Spring v4.3.8.RELEASE
+2019-06-05 23:05:20,423 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-06-05 23:05:24,880 INFO (StartupInfoLogger.java:57)- Started TronDApp in 5.307 seconds (JVM running for 7.829)
+2019-06-05 23:06:21,116 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: insert into buy_info( round_number, buy_time ) values ( ?, NOW() ) 
+2019-06-05 23:06:21,154 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 2(Integer)
+2019-06-05 23:06:21,259 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2019-06-05 23:10:23,807 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: insert into buy_info( round_number, buy_time ) values ( ?, NOW() ) 
+2019-06-05 23:10:23,808 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 100(Integer)
+2019-06-05 23:10:23,874 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1

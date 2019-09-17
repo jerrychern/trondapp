@@ -1,0 +1,7 @@
+2019-06-12 22:40:16,013 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 18020 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-12 22:40:16,036 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.10.RELEASE, Spring v4.3.8.RELEASE
+2019-06-12 22:40:16,037 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-06-12 22:40:21,979 INFO (StartupInfoLogger.java:57)- Started TronDApp in 6.966 seconds (JVM running for 10.154)
+2019-06-12 22:41:09,871 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 1884 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-12 22:41:09,896 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.10.RELEASE, Spring v4.3.8.RELEASE
+2019-06-12 22:41:09,897 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default

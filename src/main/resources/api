@@ -1,0 +1,51 @@
+1、倒计时接口：webSocket
+2、index（打开页面请求）： 输入：空
+                         输出：image 展示的图片
+                              hash值
+                              block值
+                              购买按钮是否可以点击
+                              轮次
+
+table
+    1 轮次信息表 ROUND_INFO
+        id  --主键id
+        round_number --轮次号
+        goods_name --商品名称
+        goods_img --商品图片
+        goods_price --商品价格
+        seed_value --种子值
+        seed_hash --种子HASH
+        block_value --区块HASH
+        lucky_address --中奖地址
+        lucky_subscript --中奖者下标
+
+    2 购买信息表 BUY_INFO
+        id --主键id
+        round_number --轮次号
+        buy_time --购买时间
+        buy_address --购买地址
+        buy_amount --购买金额
+        lucky_amount --中奖金额
+        status --信息状态
+
+api /luckyshop
+    轮次信息 /roundInfo
+        1 query 获取指定轮次信息
+            输入：轮次号 round_num
+            输出：该轮次所有信息
+        2 add 增加轮次信息
+            输入：轮次部分信息
+            输出：轮次id
+        3 update 更新轮次信息
+            输入：轮次号及要更新的信息
+            输出：更新后的信息
+    购买信息 /buyInfo
+        1 add 增加购买信息
+            输入：购买部分信息
+            输出：购买id
+        2 update 更新购买信息
+            输入：购买id及要更新的信息
+            输出：更新后的信息
+        3 list 购买信息列表
+            输入：查询的条件（轮次、地址等）
+            输出：列表信息

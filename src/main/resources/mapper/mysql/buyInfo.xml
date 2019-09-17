@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="shop.tronlucky.trondapp.buyInfo">
+    <resultMap id="buyInfo" type="shop.tronlucky.trondapp.model.BuyInfo">
+        <id column="id" property="id"/>
+        <result property="roundNumber" column="round_number"/>
+        <result property="buyTime" column="buy_time"/>
+        <result property="buyAddress" column="buy_address"/>
+        <result property="buyAmount" column="buy_amount"/>
+        <result property="luckyAmount" column="lucky_amount"/>
+    </resultMap>
+    <select id="listOfBuyInfo" resultMap="buyInfo">
+        select id,
+            round_number,
+            date_format(buy_time,'%y-%m-%d %h:%i:%s') buy_time,
+            buy_address,
+            buy_amount,
+            lucky_amount
+        from buy_info
+        <where>
+            <if test="roundNumber != null and roundNumber != ''">
+                round_number = #{roundNumber}
+            </if>
+            <if test="buyAddress != null and buyAddress != ''">
+                and buy_address = #{buyAddress}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addBuyInfo">
+        insert into buy_info(
+        <trim suffixOverrides=",">
+            <if test="roundNumber != null and roundNumber != ''">
+                round_number,
+            </if>
+            buy_time,
+            <if test="buyAddress != null and buyAddress != ''">
+                buy_address,
+            </if>
+            <if test="buyAmount != null and buyAmount != ''">
+                buy_amount,
+            </if>
+            <if test="luckyAmount != null and luckyAmount != ''">
+                lucky_amount
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides=",">
+            <if test="roundNumber != null and roundNumber != ''">
+                #{roundNumber},
+            </if>
+            NOW(),
+            <if test="buyAddress != null and buyAddress != ''">
+                #{buyAddress},
+            </if>
+            <if test="buyAmount != null and buyAmount != ''">
+                #{buyAmount},
+            </if>
+            <if test="luckyAmount != null and luckyAmount != ''">
+                #{luckyAmount}
+            </if>
+        </trim>
+        )
+        <selectKey keyProperty="id" resultType="java.lang.String">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+    </insert>
+
+    <update id="updateBuyInfo">
+        update buy_info
+        <set>
+            <if test="roundNumber != null and roundNumber != ''">
+                round_number = #{roundNumber},
+            </if>
+            <if test="buyAddress != null and buyAddress != ''">
+                buy_address = #{buyAddress},
+            </if>
+            <if test="buyAmount != null and buyAmount != ''">
+                buy_amount = #{buyAmount},
+            </if>
+            <if test="luckyAmount != null and luckyAmount != ''">
+                lucky_amount = #{luckyAmount}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,24 @@
+2019-06-17 21:46:54,310 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 22648 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-17 21:46:54,400 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.7.RELEASE, Spring v4.3.11.RELEASE
+2019-06-17 21:46:54,400 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-06-17 21:47:39,059 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update round_info where id = ? 
+2019-06-17 21:47:39,074 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: null
+2019-06-17 21:47:39,125 INFO (StartupInfoLogger.java:57)- Started TronDApp in 45.706 seconds (JVM running for 47.681)
+2019-06-17 21:49:14,996 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 32652 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-17 21:49:15,000 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.7.RELEASE, Spring v4.3.11.RELEASE
+2019-06-17 21:49:15,000 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-06-17 21:49:58,171 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update round_info where id = ? 
+2019-06-17 21:49:58,172 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: null
+2019-06-17 21:49:58,221 INFO (StartupInfoLogger.java:57)- Started TronDApp in 43.757 seconds (JVM running for 45.206)
+2019-06-17 21:55:05,463 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 31224 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-17 21:55:05,467 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.7.RELEASE, Spring v4.3.11.RELEASE
+2019-06-17 21:55:05,468 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-06-17 21:55:49,304 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update round_info where id = ? 
+2019-06-17 21:55:49,328 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: null
+2019-06-17 21:55:49,387 INFO (StartupInfoLogger.java:57)- Started TronDApp in 44.654 seconds (JVM running for 46.463)
+2019-06-17 21:56:33,476 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 6100 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-17 21:56:33,479 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.7.RELEASE, Spring v4.3.11.RELEASE
+2019-06-17 21:56:33,479 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-06-17 21:57:16,925 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update round_info where id = ? 
+2019-06-17 21:57:16,927 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: null
+2019-06-17 21:57:16,975 INFO (StartupInfoLogger.java:57)- Started TronDApp in 43.981 seconds (JVM running for 45.424)

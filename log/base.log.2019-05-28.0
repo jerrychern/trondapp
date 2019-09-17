@@ -1,0 +1,6 @@
+2019-05-28 15:38:58,916 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 15300 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-05-28 15:38:58,923 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.10.RELEASE, Spring v4.3.8.RELEASE
+2019-05-28 15:38:58,924 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-05-28 15:39:02,714 INFO (StartupInfoLogger.java:57)- Started TronDApp in 4.35 seconds (JVM running for 6.038)
+2019-05-28 15:41:11,967 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select purchase_round, wallet_address, purchase_number, purchase_time from AWARD_RECORD where purchase_round = ? 
+2019-05-28 15:41:11,982 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: null

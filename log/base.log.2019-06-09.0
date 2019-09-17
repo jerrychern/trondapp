@@ -1,0 +1,19 @@
+2019-06-09 23:42:17,915 INFO (StartupInfoLogger.java:48)- Starting TronDApp on DESKTOP-SPULGE6 with PID 4224 (E:\dapp\trondapp\target\classes started by HP340 in E:\dapp\trondapp)
+2019-06-09 23:42:17,924 DEBUG (StartupInfoLogger.java:51)- Running with Spring Boot v1.5.10.RELEASE, Spring v4.3.8.RELEASE
+2019-06-09 23:42:17,925 INFO (SpringApplication.java:593)- No active profile set, falling back to default profiles: default
+2019-06-09 23:42:22,995 INFO (StartupInfoLogger.java:57)- Started TronDApp in 5.733 seconds (JVM running for 8.273)
+2019-06-09 23:43:20,449 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update buy_info SET round_number = ? where id = ? 
+2019-06-09 23:43:20,480 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3(Integer), 2(String)
+2019-06-09 23:43:20,560 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2019-06-09 23:44:02,953 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update buy_info SET round_number = ? where id = ? 
+2019-06-09 23:44:02,955 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3(Integer), 6(String)
+2019-06-09 23:44:03,034 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2019-06-09 23:48:15,309 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: insert into buy_info( round_number, buy_time ) values ( ?, NOW() ) 
+2019-06-09 23:48:15,313 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3(Integer)
+2019-06-09 23:48:15,398 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1
+2019-06-09 23:48:15,402 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: select LAST_INSERT_ID() as id 
+2019-06-09 23:48:15,403 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 
+2019-06-09 23:48:15,416 DEBUG (BaseJdbcLogger.java:159)- <==      Total: 1
+2019-06-09 23:49:36,810 DEBUG (BaseJdbcLogger.java:159)- ==>  Preparing: update buy_info SET round_number = ? where id = ? 
+2019-06-09 23:49:36,811 DEBUG (BaseJdbcLogger.java:159)- ==> Parameters: 3000(Integer), 6(String)
+2019-06-09 23:49:36,893 DEBUG (BaseJdbcLogger.java:159)- <==    Updates: 1

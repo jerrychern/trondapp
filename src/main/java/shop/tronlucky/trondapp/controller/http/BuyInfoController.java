@@ -7,6 +7,7 @@ import shop.tronlucky.trondapp.model.BuyInfo;
 import shop.tronlucky.trondapp.service.BuyInfoService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Jerry Chern
@@ -19,17 +20,17 @@ public class BuyInfoController {
     private BuyInfoService buyInfoService;
 
     @PostMapping("/list")
-    public String list(@Valid @RequestBody BuyInfo buyInfo) {
-        return JSONObject.toJSONString(buyInfoService.listOfBuyInfo(buyInfo));
+    public List<BuyInfo> list(@Valid @RequestBody BuyInfo buyInfo) {
+        return buyInfoService.listOfBuyInfo(buyInfo);
     }
 
     @PostMapping("/add")
-    public String add(@RequestBody BuyInfo buyInfo) {
-        return JSONObject.toJSONString(buyInfoService.addBuyInfo(buyInfo));
+    public BuyInfo add(@RequestBody BuyInfo buyInfo) {
+        return buyInfoService.addBuyInfo(buyInfo);
     }
 
     @PostMapping("/update")
-    public String update(@RequestBody BuyInfo buyInfo) {
-        return JSONObject.toJSONString(buyInfoService.updateBuyInfo(buyInfo));
+    public BuyInfo update(@RequestBody BuyInfo buyInfo) {
+        return buyInfoService.updateBuyInfo(buyInfo);
     }
 }

@@ -14,17 +14,17 @@ public class RoundInfoController {
     private RoundInfoService roundInfoService;
 
     @GetMapping("/query")
-    public String query(String roundNumber) {
-        return JSONObject.toJSONString(roundInfoService.findRoundInfoByRound(roundNumber));
+    public RoundInfo query(String roundNumber) {
+        return roundInfoService.findRoundInfoByRound(roundNumber);
     }
 
     @PostMapping("/add")
-    public String add(@RequestBody RoundInfo roundInfo) {
-        return JSONObject.toJSONString(roundInfoService.addRoundInfo(roundInfo));
+    public RoundInfo add(@RequestBody RoundInfo roundInfo) {
+        return roundInfoService.addRoundInfo(roundInfo);
     }
 
     @PostMapping("/update")
-    public String update(@RequestBody RoundInfo roundInfo) {
-        return JSONObject.toJSONString(roundInfoService.updateRoundInfo(roundInfo));
+    public RoundInfo update(@RequestBody RoundInfo roundInfo) {
+        return roundInfoService.updateRoundInfo(roundInfo);
     }
 }

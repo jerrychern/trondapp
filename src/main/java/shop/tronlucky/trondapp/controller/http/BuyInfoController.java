@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import shop.tronlucky.trondapp.model.BuyInfo;
 import shop.tronlucky.trondapp.service.BuyInfoService;
 
+import javax.validation.Valid;
+
 /**
  * @author Jerry Chern
  */
@@ -17,7 +19,7 @@ public class BuyInfoController {
     private BuyInfoService buyInfoService;
 
     @PostMapping("/list")
-    public String list(@RequestBody BuyInfo buyInfo) {
+    public String list(@Valid @RequestBody BuyInfo buyInfo) {
         return JSONObject.toJSONString(buyInfoService.listOfBuyInfo(buyInfo));
     }
 

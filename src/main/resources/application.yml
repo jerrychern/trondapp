@@ -1,15 +1,13 @@
 server:
-  port: 12345
+  port: 8080
+  servlet:
+    context-path: /api
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/test
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=truecharacterEncoding=UTF-8&useSSL=false&serverTimezone=GMT
     username: root
     password: 1234
-    minIdle: 5
-    maxIdle: 10
-    initialSize: 5
-    maxWait: 10000
   mail:
     host: smtp.qq.com
     username: cwangjie@qq.com

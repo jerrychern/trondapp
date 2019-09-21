@@ -1,1 +1,2 @@
-linux ip: 54.183.149.49, 用户: root/trondapp 密码: dapp123
+. linux ip: 54.183.149.49, user: root/trondapp pwd: dapp123
+. mysql root/Hello#012

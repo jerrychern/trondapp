@@ -1,26 +1,3 @@
-server:
-  port: 12345
 spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/test
-    username: root
-    password: 1234
-    minIdle: 5
-    maxIdle: 10
-    initialSize: 5
-    maxWait: 10000
-  mail:
-    host: smtp.qq.com
-    username: cwangjie@qq.com
-    password: qyqfhjpjvtvsgdba
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-mybatis:
-  mapper-locations: classpath*:mapper/mysql/*.xml
-  type-aliases-package: shop.tronlucky.trondapp.model
+  profiles:
+    active: deploy

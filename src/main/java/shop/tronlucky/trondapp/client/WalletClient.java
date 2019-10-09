@@ -186,6 +186,14 @@ public class WalletClient {
         return builder.build();
     }
 
+  public byte[] triggerContractSync(byte[] contractAddress, String methodSign, long callValue)
+      throws InterruptedException, FailedExceptionException, TransactionInfoNotFoundException {
+    logger.info("trigger method " + methodSign);
+    byte[] input = AbiUtil.parseMethod(methodSign);
+    return triggerContractSync(contractAddress, callValue, input, GameSetting.FEE_LIMIT,
+        GameSetting.TOKEN_CALL_VALUE, GameSetting.TOKEN_ID);
+  }
+
     public byte[] triggerContractSync(byte[] contractAddress, String methodSign,
         List<Object> params, long callValue)
         throws InterruptedException, FailedExceptionException, TransactionInfoNotFoundException {

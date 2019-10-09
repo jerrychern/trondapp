@@ -52,9 +52,6 @@ public class ContractTriggerService {
         }
     }
 
-    @Getter
-    private static ContractTriggerService instance = new ContractTriggerService();
-
     private WalletClient triggerWallet;
     private WalletClient checkWallet;
     private int fullNodeIndex = 0;
@@ -143,14 +140,15 @@ public class ContractTriggerService {
         return new DataWord(result).longValue();
     }
 
-    public void newRoom(int level, long roomId, long gameId)
+    public void test(int level, long roomId, long gameId)
         throws InterruptedException, FailedExceptionException, TransactionInfoNotFoundException {
-        String methodSign = "newRoom(uint256,uint256,uint256)";
-        String msg = "trigger " + methodSign + "[" + level + "," + roomId + "," + gameId + "]";
-        List params = Arrays.asList(level, roomId, gameId);
-        byte[] input = AbiUtil.parseMethod(methodSign, params);
-        triggerWallet
-            .triggerContractSync(Args.getInstance().getBttContract(), methodSign, params, 0);
+        String methodSign = "t5()";
+        byte[] input = AbiUtil.parseMethod(methodSign);
+        byte[] result = triggerWallet
+            .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
+        logger.info("in test, result: " + Hex.toHexString(result));
+//        return AbiUtil.unpackAddressArray(result);
+
     }
 
 
@@ -227,7 +225,7 @@ public class ContractTriggerService {
         Args args1 = Args.getInstance();
         args1.setParam(args);
         ContractTriggerService service = new ContractTriggerService();
-        service.newRoom(1, 1, 1);
+        service.test(1, 1, 1);
     }
 
 }

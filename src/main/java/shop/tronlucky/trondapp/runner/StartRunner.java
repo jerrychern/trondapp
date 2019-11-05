@@ -26,9 +26,8 @@ public class StartRunner implements ApplicationRunner {
                 Thread.sleep(3 * 1000L);
                 logger.info("go in loop");
                 Integer status = Integer.valueOf(contractService.getStatus());
+                logger.info("status:{}", status);
                 switch (status) {
-                    case 1:
-                        logger.info("status:{}", 1);
                         String round = contractService.getRound();
                         switch (withdraw) {
                             case 4:
@@ -46,22 +45,18 @@ public class StartRunner implements ApplicationRunner {
                         contractService.commitHash();
                         break;
                     case 2:
-                        logger.info("status: {}", 2);
                         Thread.sleep(3 * 1000L);
                         break;
                     case 3:
-                        logger.info("status: {}", 3);
                         Thread.sleep(100 * 1000L);
                         contractService.commitSecret();
                         Thread.sleep(6 * 1000L);
                         break;
                     case 4:
-                        logger.info("status: {}", 4);
                         contractService.doLucky();
                         withdraw = 4;
                         break;
                     case 5:
-                        logger.info("status: {}", 5);
                         contractService.doJackpot();
                         withdraw = 5;
                         break;

@@ -1,24 +1,5 @@
-create table round_info(
+create table secret(
    id int primary key auto_increment comment '主键自增',
-   round_number int unique comment '轮次号,唯一索引',
-   goods_name varchar(20) comment '商品名称',
-   goods_img varchar(50) comment '商品图片',
-   goods_price int comment '商品价格',
-   seed_value varchar(50) comment '种子值',
-   seed_hash varchar(50) comment '种子哈希',
-   block_value varchar(50) comment '区块哈希',
-   lucky_address varchar(50) comment '中奖地址',
-   lucky_index int comment '中奖者下标',
-   begin_time datetime comment '轮次开始时间'
-)comment ='轮次信息表';
-
-create table buy_info(
-   id int primary key auto_increment comment '主键id',
-   round_number int comment '轮次号',
-   buy_time datetime comment '购买时间',
-   buy_address varchar(50) comment '购买地址',
-   buy_amount int comment '购买金额',
-   lucky_amount int comment '中奖金额'
-)comment ='购买信息表';
-
-select * from buy_info
+   round_number varchar(50) unique comment '轮次号,唯一索引',
+   secret varchar(256) comment '原始秘钥'
+)comment ='秘钥信息表';

@@ -3,64 +3,65 @@ package shop.tronlucky.trondapp.runner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import shop.tronlucky.trondapp.controller.websocket.RoundInfoSocketServer;
-import shop.tronlucky.trondapp.model.RoundInfo;
-import shop.tronlucky.trondapp.service.RoundInfoService;
+import shop.tronlucky.trondapp.service.ContractTriggerService;
 
 @Component
 public class StartRunner implements ApplicationRunner {
     @Autowired
-    private RoundInfoService roundInfoService;
+    private ContractTriggerService contractService;
+
+    @Autowired
+    JavaMailSender mailSender;
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-
-        try{
-
-
+        try {
             while (true) {
-                int i = 1;
-
-                // TODO fetch roundNumber
-                // TODO: if number > number in db, ?
-
-                // todo access smart contract
-                // optional setAssistant  // TODO exception
-
-                // if price changes, updatePrice   // TODO exception
-                // commitDeposit // TODO exception
-
-                // todo commitHash   // TODO exception
-
-                // TODO: game start
-                // TODO: update DB
-
-                Thread.sleep(40000);  // TODO: 5 mins + 1 mins
-
-                // TODO: doLucky    // TODO exception （如果失败，可能是没有达到条件）
-
-                // TODO: check status， maybe  doRefund
-
-                // fetch lucky result
-                // update DB
-                RoundInfo round = new RoundInfo();
-                roundInfoService.updateRoundInfo(round);
-                //todo access smart contract
-                String luckyAddress = "中奖号码";
-
-                new Thread(() -> RoundInfoSocketServer.sendInfo(luckyAddress)).start();
-
-                break;
+                String status = contractService.getStatus();
+                status = contractService.getStatus();
+                int withdraw = 0;
+                switch (status) {
+                    case "1":
+                        String round = contractService.getRound();
+                        switch (withdraw) {
+                            case 4:
+                                contractService.luckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
+                                break;
+                            case 5:
+                                contractService.jackpotLuckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
+                                break;
+                            default:
+                        }
+                        contractService.commitHash();
+                        break;
+                    case "2":
+                        break;
+                    case "3":
+                        Thread.sleep(100 * 1000L);
+                        contractService.commitSecret();
+                        Thread.sleep(6 * 1000L);
+                        break;
+                    case "4":
+                        contractService.doLucky();
+                        withdraw = 4;
+                        break;
+                    case "5":
+                        contractService.doJackpot();
+                        withdraw = 5;
+                        break;
+                    default:
+                }
             }
         } catch (Exception e) {
-            // TODO initRoundData exception
-            // TODO:  邮件
-            // TODO:  write to db: maintain
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("cwangjie@qq.com");
+            message.setTo("cwangjie@gmail.com", "tjchern@qq.com");
+            message.setSubject("fatal error");
+            message.setText(e.getMessage());
+            mailSender.send(message);
         }
-    }
-
-    public static int checkStatus() {
-        return 1;
     }
 }

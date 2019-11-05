@@ -239,6 +239,14 @@ public class ContractTriggerService {
         return Hex.toHexString(result);
     }
 
+    public String getJackpotRound() {
+        String methodSign = "jackpotRound()";
+        byte[] input = AbiUtil.parseMethod(methodSign);
+        byte[] result = triggerWallet
+            .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
+        return Hex.toHexString(result);
+    }
+
     public void commitHash() {
         String key = generateUniqueKey();
         String methodSign = "commitHash(bytes32)";

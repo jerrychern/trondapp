@@ -28,16 +28,17 @@ public class StartRunner implements ApplicationRunner {
                 Integer status = Integer.valueOf(contractService.getStatus());
                 switch (status) {
                     case 1:
-                        String round = contractService.getRound();
                         logger.info("status:{}", 1);
+                        String round = contractService.getRound();
                         switch (withdraw) {
                             case 4:
                                 contractService.luckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
                                 withdraw = 0;
                                 break;
                             case 5:
+                                String jackpotRound = contractService.getJackpotRound();
                                 contractService.luckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
-                                contractService.jackpotLuckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
+                                contractService.jackpotLuckyWithdraw(String.valueOf(Integer.valueOf(jackpotRound) - 1));
                                 withdraw = 0;
                                 break;
                             default:

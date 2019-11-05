@@ -28,6 +28,7 @@ public class StartRunner implements ApplicationRunner {
                 Integer status = Integer.valueOf(contractService.getStatus());
                 logger.info("status:{}", status);
                 switch (status) {
+                    case 1:
                         String round = contractService.getRound();
                         switch (withdraw) {
                             case 4:

@@ -3,16 +3,13 @@ package shop.tronlucky.trondapp.service;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.spongycastle.jcajce.provider.digest.Keccak;
-import org.spongycastle.jcajce.provider.digest.SHA3;
 import org.spongycastle.util.encoders.Hex;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import shop.tronlucky.trondapp.client.WalletClient;
 import shop.tronlucky.trondapp.common.crypto.Hash;
 import shop.tronlucky.trondapp.common.utils.AbiUtil;
+import shop.tronlucky.trondapp.common.utils.ByteArray;
 import shop.tronlucky.trondapp.common.utils.DataWord;
 import shop.tronlucky.trondapp.common.utils.ProtoBufUtils;
 import shop.tronlucky.trondapp.config.Args;
@@ -22,6 +19,7 @@ import shop.tronlucky.trondapp.exception.TransactionInfoNotFoundException;
 import shop.tronlucky.trondapp.model.Secret;
 import shop.tronlucky.trondapp.protos.Protocol.TransactionInfo;
 
+import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
@@ -217,8 +215,7 @@ public class ContractTriggerService {
 
 
     /*the below is normal code*/
-    public void test(int level, long roomId, long gameId)
-            throws InterruptedException, FailedExceptionException, TransactionInfoNotFoundException {
+    public void test() {
         String methodSign = "t5()";
         byte[] input = AbiUtil.parseMethod(methodSign);
         byte[] result = triggerWallet
@@ -245,7 +242,9 @@ public class ContractTriggerService {
     public void commitHash() {
         String key = generateUniqueKey();
         String methodSign = "commitHash(bytes32)";
-        String hash = key;//todo
+        DataWord word = new DataWord(key);
+        byte[] encoded = Hash.sha3(word.getData());
+        String hash = Hex.toHexString(encoded);
         List<Object> params = Collections.singletonList(hash);
         triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
                 methodSign, params, 0, 0, 0);
@@ -299,6 +298,7 @@ public class ContractTriggerService {
         byte[] bytes = new byte[32];
         random.nextBytes(bytes);
         String secret = Hex.toHexString(bytes);
+
         Object secretInDB = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findBySecret", secret);
         if (secretInDB == null) {
             return secret;
@@ -308,15 +308,16 @@ public class ContractTriggerService {
     }
 
     public static void main(String[] args) throws InterruptedException, FailedExceptionException, TransactionInfoNotFoundException {
-        String hello = "0x7465737400000000000000000000000000000000000000000000000000000000";
-        byte[] bytes = Hash.sha3(hello.getBytes());
+        String hello = "7465737400000000000000000000000000000000000000000000000000000000";
+        DataWord word = new DataWord(hello);
+        byte[] encoded = Hash.sha3(word.getData());
 
-        logger.info("SHA3-256 = {}" , Hex.toHexString(bytes));
+        logger.info("SHA3-256 = {}", Hex.toHexString(encoded));
 
         Args args1 = Args.getInstance();
         args1.setParam(args);
-        ContractTriggerService service = new ContractTriggerService();
+
 //        service.test(1,1,1);
-        service.getStatus();
+//        service.getStatus();
     }
 }

@@ -246,12 +246,12 @@ public class ContractTriggerService {
         byte[] encoded = Hash.sha3(word.getData());
         String hash = Hex.toHexString(encoded);
         List<Object> params = Collections.singletonList(hash);
-        triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                methodSign, params, 0, 0, 0);
         Secret secret = new Secret();
         secret.setSecret(key);
         secret.setRoundNumber(getRound());
         daoHelper.insert("shop.tronlucky.trondapp.secret.addSecret", secret);
+        triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
+                methodSign, params, 0, 0, 0);
     }
 
     public void commitSecret() {
@@ -313,11 +313,11 @@ public class ContractTriggerService {
         byte[] encoded = Hash.sha3(word.getData());
 
         logger.info("SHA3-256 = {}", Hex.toHexString(encoded));
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[32];
+        random.nextBytes(bytes);
+        String secret = Hex.toHexString(bytes);
 
-        Args args1 = Args.getInstance();
-        args1.setParam(args);
-
-//        service.test(1,1,1);
-//        service.getStatus();
+        logger.info("secret{}", secret);
     }
 }

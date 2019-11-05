@@ -20,12 +20,12 @@ public class StartRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
+        int withdraw = 0;
         while (true) {
             try {
                 Thread.sleep(3 * 1000L);
                 logger.info("go in loop");
                 Integer status = Integer.valueOf(contractService.getStatus());
-                int withdraw = 0;
                 switch (status) {
                     case 1:
                         String round = contractService.getRound();
@@ -43,6 +43,7 @@ public class StartRunner implements ApplicationRunner {
                         break;
                     case 2:
                         logger.info("status: {}", 2);
+                        Thread.sleep(3 * 1000L);
                         break;
                     case 3:
                         logger.info("status: {}", 3);

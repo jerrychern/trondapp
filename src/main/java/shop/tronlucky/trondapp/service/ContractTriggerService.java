@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import shop.tronlucky.trondapp.client.WalletClient;
+import shop.tronlucky.trondapp.common.crypto.Hash;
 import shop.tronlucky.trondapp.common.utils.AbiUtil;
 import shop.tronlucky.trondapp.common.utils.DataWord;
 import shop.tronlucky.trondapp.common.utils.ProtoBufUtils;
@@ -306,28 +307,16 @@ public class ContractTriggerService {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException, FailedExceptionException, TransactionInfoNotFoundException {
         String hello = "0x7465737400000000000000000000000000000000000000000000000000000000";
-        SHA3.DigestSHA3 sha3 = new SHA3.DigestSHA3(256);
-        Keccak.Digest256 keccak = new Keccak.Digest256();
-        keccak.update(hello.getBytes());
+        byte[] bytes = Hash.sha3(hello.getBytes());
 
-        byte[] digest = sha3.digest(hello.getBytes());
+        logger.info("SHA3-256 = {}" , Hex.toHexString(bytes));
 
-        System.out.println("SHA3-256 = " + Hex.toHexString(digest));
-
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("cwangjie@qq.com");
-        message.setTo("cwangjie@gmail.com");
-        message.setSubject("主题：简单邮件");
-        message.setText("测试邮件内容");
-        JavaMailSender mailSender = new JavaMailSenderImpl();
-        mailSender.send(message);
-
-        /*Args args1 = Args.getInstance();
+        Args args1 = Args.getInstance();
         args1.setParam(args);
         ContractTriggerService service = new ContractTriggerService();
-        service.getStatus();*/
+//        service.test(1,1,1);
+        service.getStatus();
     }
 }

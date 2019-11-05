@@ -29,13 +29,14 @@ public class StartRunner implements ApplicationRunner {
                 switch (status) {
                     case 1:
                         String round = contractService.getRound();
-                        logger.info("status: {}", 1);
+                        logger.info("status:{}", 1);
                         switch (withdraw) {
                             case 4:
                                 contractService.luckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
                                 withdraw = 0;
                                 break;
                             case 5:
+                                contractService.luckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
                                 contractService.jackpotLuckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
                                 withdraw = 0;
                                 break;
@@ -66,7 +67,7 @@ public class StartRunner implements ApplicationRunner {
                     default:
                 }
             } catch (Exception e) {
-                logger.error("fatal error: {}", e);
+                logger.error("fatal error:", e);
                 SimpleMailMessage message = new SimpleMailMessage();
                 message.setFrom("cwangjie@qq.com");
                 message.setTo("cwangjie@gmail.com", "tjchern@qq.com");

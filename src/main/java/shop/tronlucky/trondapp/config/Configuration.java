@@ -29,7 +29,7 @@ public class Configuration {
 
     if (config == null) {
       File configFile = new File(configurationPath);
-      logger.info("config file: " + configFile.getAbsolutePath());
+      logger.info("config file: {}" + configFile.getAbsolutePath());
       if(configFile.exists()){
         try {
           config = ConfigFactory.parseReader(new InputStreamReader(new FileInputStream(configFile)));

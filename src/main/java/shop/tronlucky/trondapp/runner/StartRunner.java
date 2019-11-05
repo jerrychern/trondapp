@@ -15,10 +15,7 @@ public class StartRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-
         try{
-
-
             while (true) {
                 int i = 1;
 

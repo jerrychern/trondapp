@@ -151,13 +151,12 @@ public class ContractTriggerService {
 
     }
 
-
     public String buyOrder(long trcToken, long amountA, long amountB, long price, long callValue, long tokenValue) {
         String methodSign = "buyOrder(trcToken,uint256,uint256,uint256)";
         List params = Arrays.asList(trcToken, amountA, amountB, price);
         return triggerWallet
             .triggerContractNormal(Args.getInstance().getBttContract(), methodSign, params,
-                callValue, trcToken, tokenValue);
+                0, 0, 0);
     }
 
     public String sellOrder(long trcToken, long amountA, long amountB, long price, long callValue, long tokenValue) {

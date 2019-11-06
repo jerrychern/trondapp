@@ -4,19 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import shop.tronlucky.trondapp.service.ContractTriggerService;
 
 @Component
 @Slf4j
 public class StartRunner implements ApplicationRunner {
-    @Autowired
+
     private ContractTriggerService contractService;
 
     @Autowired
-    JavaMailSender mailSender;
+    public void setContractService(ContractTriggerService contractService) {
+        this.contractService = contractService;
+    }
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
@@ -65,12 +65,6 @@ public class StartRunner implements ApplicationRunner {
                 }
             } catch (Exception e) {
                 logger.error("fatal error:", e);
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setFrom("cwangjie@qq.com");
-                message.setTo("cwangjie@gmail.com", "tjchern@qq.com");
-                message.setSubject("fatal error");
-                message.setText(e.getMessage());
-                mailSender.send(message);
             }
         }
     }

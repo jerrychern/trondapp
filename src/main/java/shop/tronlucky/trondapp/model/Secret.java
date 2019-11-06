@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Secret {
-    private int id;
+    private Integer id;
 
-    private String roundNumber;
+    private Integer roundNumber;
 
-    private String secret;
+    private String key;
 }

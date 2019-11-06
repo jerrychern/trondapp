@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="shop.tronlucky.trondapp.secret">
-    <resultMap id="secret" type="shop.tronlucky.trondapp.model.Secret">
+<mapper namespace="shop.tronlucky.trondapp.withdrawfaillog">
+    <resultMap id="secret" type="shop.tronlucky.trondapp.model.WithdrawFailLog">
         <id column="id" property="id"/>
         <result property="roundNumber" column="round_number"/>
-        <result property="key" column="key"/>
+        <result property="withdrawType" column="withdraw_type"/>
     </resultMap>
     <select id="findByRound" resultMap="secret">
         select id,
             round_number,
-            `key`
-        from secret
+            withdraw_type
+        from withdraw_fail_log
         <choose>
             <when test='_parameter != null'>
                 where round_number = #{roundNumber}
@@ -21,29 +21,14 @@
         </choose>
     </select>
 
-    <select id="findByKey" resultMap="secret">
-        select id,
-        round_number,
-        `key`
-        from secret
-        <choose>
-            <when test='key != null'>
-                where `key` = #{key}
-            </when>
-            <otherwise>
-                order by round_number desc limit 1
-            </otherwise>
-        </choose>
-    </select>
-
-    <insert id="addSecret">
-        insert into secret(
+    <insert id="addWithdrawFailLog">
+        insert into withdraw_fail_log(
         <trim suffixOverrides=",">
             <if test="roundNumber != null and roundNumber != ''">
                 round_number,
             </if>
-            <if test="key != null and key != ''">
-                `key`,
+            <if test="withdrawType != null and withdrawType != ''">
+                withdraw_type,
             </if>
         </trim>
         )
@@ -53,8 +38,8 @@
             <if test="roundNumber != null and roundNumber != ''">
                 #{roundNumber},
             </if>
-            <if test="key != null and key != ''">
-                #{key}
+            <if test="withdrawType != null and withdrawType != ''">
+                #{withdrawType}
             </if>
         </trim>
         )
@@ -62,17 +47,4 @@
             select LAST_INSERT_ID() as id
         </selectKey>
     </insert>
-
-    <update id="updateSecretInfo">
-        update secret
-        <set>
-            <if test="roundNumber != null and roundNumber != ''">
-                round_number = #{roundNumber},
-            </if>
-            <if test="key != null and key != ''">
-                `key` = #{key},
-            </if>
-        </set>
-        where id = #{id}
-    </update>
 </mapper>

@@ -19,26 +19,26 @@ public class StartRunner implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
+    public void run(ApplicationArguments applicationArguments) {
         int withdraw = 0;
         while (true) {
             try {
                 Thread.sleep(3 * 1000L);
                 logger.info("go in loop");
-                Integer status = Integer.valueOf(contractService.getStatus());
+                Integer status = contractService.getStatus();
                 logger.info("status:{}", status);
                 switch (status) {
                     case 1:
-                        String round = contractService.getRound();
+                        Integer round = contractService.getRound();
                         switch (withdraw) {
                             case 4:
-                                contractService.luckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
+                                contractService.luckyWithdraw(round - 1);
                                 withdraw = 0;
                                 break;
                             case 5:
-                                String jackpotRound = contractService.getJackpotRound();
-                                contractService.luckyWithdraw(String.valueOf(Integer.valueOf(round) - 1));
-                                contractService.jackpotLuckyWithdraw(String.valueOf(Integer.valueOf(jackpotRound) - 1));
+                                Integer jackpotRound = contractService.getJackpotRound();
+                                contractService.luckyWithdraw(round - 1);
+                                contractService.jackpotLuckyWithdraw(jackpotRound - 1);
                                 withdraw = 0;
                                 break;
                             default:
@@ -64,7 +64,7 @@ public class StartRunner implements ApplicationRunner {
                     default:
                 }
             } catch (Exception e) {
-                logger.error("fatal error:", e);
+                logger.error("occur error in loop :", e);
             }
         }
     }

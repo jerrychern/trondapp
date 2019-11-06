@@ -146,7 +146,7 @@ public class ContractTriggerService {
 
     @Recover
     public void recover(WithdrawException e) {
-        Integer round = getRound();
+        Integer round = getRound() - 1;
         mailService.sendMail("fatal: withdraw fail", "hello: \n withdraw fail, " +
                 "please manually intervene. round = " + round + "," + e);
         WithdrawFailLog log = new WithdrawFailLog();
@@ -169,7 +169,7 @@ public class ContractTriggerService {
 
     @Recover
     public void recover(JackpotWithdrawException e) {
-        Integer round = getJackpotRound();
+        Integer round = getJackpotRound() - 1;
         mailService.sendMail("fatal: jackpot withdraw fail", "hello: \n jackpot withdraw fail, " +
                 "please manually intervene. jackpot round = " + round + "," + e);
         WithdrawFailLog log = new WithdrawFailLog();

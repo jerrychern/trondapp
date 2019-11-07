@@ -1,6 +1,5 @@
 package shop.tronlucky.trondapp.service;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,12 @@ import shop.tronlucky.trondapp.exception.JackpotWithdrawException;
 import shop.tronlucky.trondapp.exception.WithdrawException;
 import shop.tronlucky.trondapp.model.Secret;
 import shop.tronlucky.trondapp.model.WithdrawFailLog;
+import shop.tronlucky.trondapp.protos.Protocol;
 
 import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -84,8 +85,7 @@ public class ContractTriggerService {
         return Integer.valueOf(Hex.toHexString(result));
     }
 
-    public void commitHash() {
-        Integer round = getRound();
+    public void commitHash(Integer round) {
         String key;
         Secret secretInDB = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", round);
         if (secretInDB != null) {
@@ -102,33 +102,29 @@ public class ContractTriggerService {
         String hash = Hex.toHexString(encoded);
         List<Object> params = Collections.singletonList(hash);
         String methodSign = "commitHash(bytes32)";
-        triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                methodSign, params, 0, 0, 0);
+        triggerContractAndCatchNoEnergy(methodSign, params);
     }
 
-    public void commitSecret() {
-        Secret secret = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", getRound());
+    public void commitSecret(Integer round) {
+        Secret secret = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", round);
         String methodSign = "commitSecret(bytes32)";
         String key = secret.getKey();
         List<Object> params = Collections.singletonList(key);
-        triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                methodSign, params, 0, 0, 0);
+        triggerContractAndCatchNoEnergy(methodSign, params);
     }
 
     public void doLucky() {
         String methodSign = "doLucky(uint256)";
         int loopCnt = 5;
         List<Object> params = Collections.singletonList(loopCnt);
-        triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                methodSign, params, 0, 0, 0);
+        triggerContractAndCatchNoEnergy(methodSign, params);
     }
 
     public void doJackpot() {
         String methodSign = "doJackpot(uint256)";
         int loopCnt = 5;
         List<Object> params = Collections.singletonList(loopCnt);
-        triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                methodSign, params, 0, 0, 0);
+        triggerContractAndCatchNoEnergy(methodSign, params);
     }
 
     @Retryable(maxAttempts = 2)
@@ -136,9 +132,7 @@ public class ContractTriggerService {
         try {
             String methodSign = "luckyWithdraw(uint128)";
             List<Object> params = Collections.singletonList(round);
-            String s = triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                    methodSign, params, 0, 0, 0);
-            logger.info("s = "+s);
+            triggerContractAndCatchNoEnergy(methodSign, params);
         } catch (Exception e) {
             throw new WithdrawException("withdraw fail");
         }
@@ -160,8 +154,7 @@ public class ContractTriggerService {
         try {
             String methodSign = "jackpotLuckyWithdraw(uint256)";
             List<Object> params = Collections.singletonList(round);
-            triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                    methodSign, params, 0, 0, 0);
+            triggerContractAndCatchNoEnergy(methodSign, params);
         } catch (Exception e) {
             throw new JackpotWithdrawException("jackpot withdraw fail");
         }
@@ -176,6 +169,26 @@ public class ContractTriggerService {
         log.setRoundNumber(round);
         log.setWithdrawType(2);
         daoHelper.insert("shop.tronlucky.trondapp.withdrawfaillog.addWithdrawFailLog", log);
+    }
+
+    public void goNextRound() {
+        String methodSign = "goNextRound()";
+        List<Object> params = Collections.singletonList(1);
+        triggerContractAndCatchNoEnergy(methodSign, params);
+    }
+
+    private void triggerContractAndCatchNoEnergy(String methodSign, List<Object> params) {
+        String txId = triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
+                methodSign, params, 0, 0, 0);
+        Optional<Protocol.TransactionInfo> t = triggerWallet.getTransactionInfoById(txId);
+        if (t.isPresent()) {
+            Protocol.Transaction.Result.contractResult result = t.get().getReceipt().getResult();
+            if (result == Protocol.Transaction.Result.contractResult.OUT_OF_ENERGY) {
+                logger.info("we have no energy when {}, txId = {}", methodSign, txId);
+                mailService.sendMail("OUT_OF_ENERGY", "Emergency! " +
+                        "\n we have no energy when " + methodSign + ", txId = " + txId);
+            }
+        }
     }
 
     private String generateUniqueKey() {

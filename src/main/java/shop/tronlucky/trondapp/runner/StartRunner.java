@@ -26,10 +26,10 @@ public class StartRunner implements ApplicationRunner {
                 Thread.sleep(3 * 1000L);
                 logger.info("go in loop");
                 Integer status = contractService.getStatus();
+                Integer round = contractService.getRound();
                 logger.info("status:{}", status);
                 switch (status) {
                     case 1:
-                        Integer round = contractService.getRound();
                         switch (withdraw) {
                             case 4:
                                 contractService.luckyWithdraw(round - 1);
@@ -43,14 +43,14 @@ public class StartRunner implements ApplicationRunner {
                                 break;
                             default:
                         }
-                        contractService.commitHash();
+                        contractService.commitHash(round);
                         break;
                     case 2:
                         Thread.sleep(3 * 1000L);
                         break;
                     case 3:
                         Thread.sleep(100 * 1000L);
-                        contractService.commitSecret();
+                        contractService.commitSecret(round);
                         Thread.sleep(6 * 1000L);
                         break;
                     case 4:
@@ -60,6 +60,10 @@ public class StartRunner implements ApplicationRunner {
                     case 5:
                         contractService.doJackpot();
                         withdraw = 5;
+                        break;
+                    case 6:
+                        Thread.sleep(15 * 1000L);
+                        contractService.goNextRound();
                         break;
                     default:
                 }

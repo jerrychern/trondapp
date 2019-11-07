@@ -208,8 +208,12 @@ public class WalletClient {
         logger.info("trigger method: " + methodSign + " params: " + params.toString());
         logger.info(
             "callValue: " + callValue + ", trcToken: " + trcToken + ", tokenValue: " + tokenValue);
-        byte[] input = AbiUtil.parseMethod(methodSign, params);
-        // return "testtx";
+        byte[] input;
+        if (params.isEmpty()) {
+            input = AbiUtil.parseMethod(methodSign);
+        } else {
+            input = AbiUtil.parseMethod(methodSign, params);
+        }
         if (tokenValue > 0) {
             return triggerContractNormal(contractAddress, callValue, input, GameSetting.FEE_LIMIT,
                 tokenValue, trcToken);

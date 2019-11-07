@@ -1,5 +1,6 @@
 package shop.tronlucky.trondapp.service;
 
+import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,8 +174,7 @@ public class ContractTriggerService {
 
     public void goNextRound() {
         String methodSign = "goNextRound()";
-        List<Object> params = Collections.singletonList(1);
-        triggerContractAndCatchNoEnergy(methodSign, params);
+        triggerContractAndCatchNoEnergy(methodSign, new ArrayList<>());
     }
 
     private void triggerContractAndCatchNoEnergy(String methodSign, List<Object> params) {

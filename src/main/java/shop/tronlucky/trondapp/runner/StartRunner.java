@@ -26,8 +26,9 @@ public class StartRunner implements ApplicationRunner {
                 Thread.sleep(3 * 1000L);
                 logger.info("go in loop");
                 Integer status = contractService.getStatus();
-                Integer round = contractService.getRound();
                 logger.info("status:{}", status);
+                Integer round = contractService.getRound();
+                logger.info("round:{}", round);
                 switch (status) {
                     case 1:
                         switch (withdraw) {

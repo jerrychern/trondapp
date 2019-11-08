@@ -5,7 +5,7 @@ spring:
     host: smtp.qq.com
     username: cwangjie@qq.com
     password: qyqfhjpjvtvsgdba
-    recipients: cwangjie@qq.com, cwangjie@126.com
+    recipients: cwangjie@qq.com, pkutjchern@gmail.com
     properties:
       mail:
         smtp:

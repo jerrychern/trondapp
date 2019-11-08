@@ -5,6 +5,7 @@ spring:
     host: smtp.qq.com
     username: cwangjie@qq.com
     password: qyqfhjpjvtvsgdba
+    recipients: cwangjie@qq.com, cwangjie@126.com
     properties:
       mail:
         smtp:
@@ -12,6 +13,8 @@ spring:
           starttls:
             enable: true
             required: true
+          ssl:
+            trust: smtp.qq.com
   datasource:
     schema: classpath:DB/DDL_SQL.sql
     sql-script-encoding: utf-8

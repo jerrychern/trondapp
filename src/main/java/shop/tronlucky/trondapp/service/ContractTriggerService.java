@@ -1,6 +1,7 @@
 package shop.tronlucky.trondapp.service;
 
 import java.util.ArrayList;
+
 import lombok.extern.slf4j.Slf4j;
 import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,11 @@ public class ContractTriggerService {
     public void commitSecret(Integer round) {
         Secret secret = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", round);
         String methodSign = "commitSecret(bytes32)";
+        if (secret == null) {
+            logger.error("occur error when commit hash, " +
+                    "cannot find key in table `secret` where round = {}", round);
+            return;
+        }
         String key = secret.getKey();
         List<Object> params = Collections.singletonList(key);
         triggerContractAndCatchNoEnergy(methodSign, params);

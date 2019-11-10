@@ -68,7 +68,7 @@ public class ContractTriggerService {
         byte[] input = AbiUtil.parseMethod(methodSign);
         byte[] result = triggerWallet
                 .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
-        return bytesToInt(result);
+        return Integer.parseInt(Hex.toHexString(result), 16);
     }
 
     public Integer getRound() {
@@ -76,7 +76,7 @@ public class ContractTriggerService {
         byte[] input = AbiUtil.parseMethod(methodSign);
         byte[] result = triggerWallet
                 .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
-        return bytesToInt(result);
+        return Integer.parseInt(Hex.toHexString(result), 16);
     }
 
     public Integer getJackpotRound() {
@@ -84,9 +84,10 @@ public class ContractTriggerService {
         byte[] input = AbiUtil.parseMethod(methodSign);
         byte[] result = triggerWallet
                 .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
-        return bytesToInt(result);
+        return Integer.parseInt(Hex.toHexString(result), 16);
     }
 
+    @Retryable(maxAttempts = 5)
     public void commitHash(Integer round) {
         String key;
         Secret secretInDB = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", round);
@@ -107,6 +108,7 @@ public class ContractTriggerService {
         triggerContractAndCatchNoEnergy(methodSign, params);
     }
 
+    @Retryable(maxAttempts = 5)
     public void commitSecret(Integer round) {
         Secret secret = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", round);
         String methodSign = "commitSecret(bytes32)";
@@ -209,14 +211,6 @@ public class ContractTriggerService {
         } else {
             return generateUniqueKey();
         }
-    }
-
-    private int bytesToInt(byte[] bs) {
-        int a = 0;
-        for (int i = bs.length - 1; i >= 0; i--) {
-            a += bs[i] * Math.pow(255, bs.length - i - 1);
-        }
-        return a;
     }
 
     public static void main(String[] args) {

@@ -50,9 +50,9 @@ public class StartRunner implements ApplicationRunner {
                         Thread.sleep(3 * 1000L);
                         break;
                     case 3:
-                        Thread.sleep(100 * 1000L);
+                        Thread.sleep(30 * 1000L);
                         contractService.commitSecret(round);
-                        Thread.sleep(6 * 1000L);
+                        Thread.sleep(3 * 1000L);
                         break;
                     case 4:
                         contractService.doLucky();

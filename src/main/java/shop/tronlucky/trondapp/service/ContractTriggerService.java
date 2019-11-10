@@ -52,6 +52,7 @@ public class ContractTriggerService {
     }
 
     private void initWallet() {
+        Args.getInstance().setParam(new String[0]);
         List<String> fullNodeList = Args.getInstance().getFullNodeList();
         fullNodeIndex %= fullNodeList.size();
         String fullNode = fullNodeList.get(fullNodeIndex++);

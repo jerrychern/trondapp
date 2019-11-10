@@ -68,7 +68,7 @@ public class ContractTriggerService {
         byte[] input = AbiUtil.parseMethod(methodSign);
         byte[] result = triggerWallet
                 .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
-        return Integer.valueOf(Hex.toHexString(result));
+        return bytesToInt(result);
     }
 
     public Integer getRound() {
@@ -76,7 +76,7 @@ public class ContractTriggerService {
         byte[] input = AbiUtil.parseMethod(methodSign);
         byte[] result = triggerWallet
                 .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
-        return Integer.valueOf(Hex.toHexString(result));
+        return bytesToInt(result);
     }
 
     public Integer getJackpotRound() {
@@ -84,7 +84,7 @@ public class ContractTriggerService {
         byte[] input = AbiUtil.parseMethod(methodSign);
         byte[] result = triggerWallet
                 .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
-        return Integer.valueOf(Hex.toHexString(result));
+        return bytesToInt(result);
     }
 
     public void commitHash(Integer round) {
@@ -96,7 +96,7 @@ public class ContractTriggerService {
             key = generateUniqueKey();
             Secret secret = new Secret();
             secret.setKey(key);
-            secret.setRoundNumber(getRound());
+            secret.setRoundNumber(round);
             daoHelper.insert("shop.tronlucky.trondapp.secret.addSecret", secret);
         }
         DataWord word = new DataWord(key);
@@ -209,6 +209,14 @@ public class ContractTriggerService {
         } else {
             return generateUniqueKey();
         }
+    }
+
+    private int bytesToInt(byte[] bs) {
+        int a = 0;
+        for (int i = bs.length - 1; i >= 0; i--) {
+            a += bs[i] * Math.pow(255, bs.length - i - 1);
+        }
+        return a;
     }
 
     public static void main(String[] args) {

@@ -1,7 +1,5 @@
 package shop.tronlucky.trondapp.service;
 
-import java.util.ArrayList;
-
 import lombok.extern.slf4j.Slf4j;
 import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,7 @@ import shop.tronlucky.trondapp.model.WithdrawFailLog;
 import shop.tronlucky.trondapp.protos.Protocol;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -90,17 +89,12 @@ public class ContractTriggerService {
 
     @Retryable(maxAttempts = 5)
     public void commitHash(Integer round) {
-        String key;
-        Secret secretInDB = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", round);
-        if (secretInDB != null) {
-            key = secretInDB.getKey();
-        } else {
-            key = generateUniqueKey();
-            Secret secret = new Secret();
-            secret.setKey(key);
-            secret.setRoundNumber(round);
-            daoHelper.insert("shop.tronlucky.trondapp.secret.addSecret", secret);
-        }
+        String key = generateUniqueKey();
+        Secret secret = new Secret();
+        secret.setKey(key);
+        secret.setRoundNumber(round);
+        daoHelper.update("shop.tronlucky.trondapp.secret.addSecret", secret);
+
         DataWord word = new DataWord(key);
         byte[] encoded = Hash.sha3(word.getData());
         String hash = Hex.toHexString(encoded);

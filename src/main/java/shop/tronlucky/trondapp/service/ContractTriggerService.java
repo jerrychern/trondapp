@@ -29,6 +29,7 @@ import java.util.Optional;
 @Slf4j
 @EnableRetry
 public class ContractTriggerService {
+    private static final String TIME_OUT_TAG = "curBlockNum - endBlock should <= expiredBlockCnt";
     private DaoHelper daoHelper;
 
     private MailService mailService;
@@ -88,7 +89,7 @@ public class ContractTriggerService {
     }
 
     @Retryable(maxAttempts = 5)
-    public void commitHash(Integer round) {
+    public void commitHash(Integer round) throws InterruptedException {
         String key = generateUniqueKey();
         Secret secret = new Secret();
         secret.setKey(key);
@@ -100,11 +101,11 @@ public class ContractTriggerService {
         String hash = Hex.toHexString(encoded);
         List<Object> params = Collections.singletonList(hash);
         String methodSign = "commitHash(bytes32)";
-        triggerContractAndCatchNoEnergy(methodSign, params);
+        triggerContractAndCatchNoEnergy(params, methodSign);
     }
 
     @Retryable(maxAttempts = 5)
-    public void commitSecret(Integer round) {
+    public void commitSecret(Integer round) throws InterruptedException {
         Secret secret = daoHelper.queryOne("shop.tronlucky.trondapp.secret.findByRound", round);
         String methodSign = "commitSecret(bytes32)";
         if (secret == null) {
@@ -114,21 +115,21 @@ public class ContractTriggerService {
         }
         String key = secret.getKey();
         List<Object> params = Collections.singletonList(key);
-        triggerContractAndCatchNoEnergy(methodSign, params);
+        triggerContractAndCatchNoEnergy(params, methodSign);
     }
 
-    public void doLucky() {
+    public void doLucky(int round) throws InterruptedException {
         String methodSign = "doLucky(uint256)";
         int loopCnt = 5;
         List<Object> params = Collections.singletonList(loopCnt);
-        triggerContractAndCatchNoEnergy(methodSign, params);
+        triggerContractAndCatchNoEnergy(params, methodSign, String.valueOf(round));
     }
 
-    public void doJackpot() {
+    public void doJackpot(int round) throws InterruptedException {
         String methodSign = "doJackpot(uint256)";
         int loopCnt = 5;
         List<Object> params = Collections.singletonList(loopCnt);
-        triggerContractAndCatchNoEnergy(methodSign, params);
+        triggerContractAndCatchNoEnergy(params, methodSign, String.valueOf(round));
     }
 
     @Retryable(maxAttempts = 2)
@@ -136,7 +137,7 @@ public class ContractTriggerService {
         try {
             String methodSign = "luckyWithdraw(uint128)";
             List<Object> params = Collections.singletonList(round);
-            triggerContractAndCatchNoEnergy(methodSign, params);
+            triggerContractAndCatchNoEnergy(params, methodSign);
         } catch (Exception e) {
             throw new WithdrawException("withdraw fail");
         }
@@ -158,7 +159,7 @@ public class ContractTriggerService {
         try {
             String methodSign = "jackpotLuckyWithdraw(uint256)";
             List<Object> params = Collections.singletonList(round);
-            triggerContractAndCatchNoEnergy(methodSign, params);
+            triggerContractAndCatchNoEnergy(params, methodSign);
         } catch (Exception e) {
             throw new JackpotWithdrawException("jackpot withdraw fail");
         }
@@ -175,21 +176,63 @@ public class ContractTriggerService {
         daoHelper.insert("shop.tronlucky.trondapp.withdrawfaillog.addWithdrawFailLog", log);
     }
 
-    public void goNextRound() {
+    public void goNextRound() throws InterruptedException {
         String methodSign = "goNextRound()";
-        triggerContractAndCatchNoEnergy(methodSign, new ArrayList<>());
+        triggerContractAndCatchNoEnergy(new ArrayList<>(), methodSign);
     }
 
-    private void triggerContractAndCatchNoEnergy(String methodSign, List<Object> params) {
+    private void doRefund() throws InterruptedException {
+        String methodSign = "doRefund()";
+        triggerContractAndCatchNoEnergy(new ArrayList<>(), methodSign);
+    }
+
+    private void sendRefund(int round) throws InterruptedException {
+        int playerCnt = roundPlayersCnt(round);
+        int loops = playerCnt / 10;
+        for (int i = 0; i <= loops; i++) {
+            String methodSign = "sendRefund(uint128 r, uint256 fromIndex, uint256 loopCnt)";
+            List<Object> params = new ArrayList<>();
+            params.add(round);
+            params.add(i * 10);
+            int loopCnt = 10;
+            if (i == loops) {
+                loopCnt = playerCnt % 10;
+            }
+            params.add(loopCnt);
+            triggerContractAndCatchNoEnergy(params, methodSign);
+        }
+    }
+
+    private int roundPlayersCnt(int round) {
+        String methodSign = "roundPlayersCnt(uint128)";
+        byte[] input = AbiUtil.parseMethod(methodSign, String.valueOf(round));
+        byte[] result = triggerWallet
+                .triggerConstantContractWithReturn(Args.getInstance().getBttContract(), 0, input);
+        return Integer.parseInt(Hex.toHexString(result), 16);
+    }
+
+    private void triggerContractAndCatchNoEnergy(List<Object> params, String... args) throws InterruptedException {
         String txId = triggerWallet.triggerContractNormal(Args.getInstance().getBttContract(),
-                methodSign, params, 0, 0, 0);
+                args[0], params, 0, 0, 0);
+        Thread.sleep(3 * 1000L);
         Optional<Protocol.TransactionInfo> t = triggerWallet.getTransactionInfoById(txId);
         if (t.isPresent()) {
             Protocol.Transaction.Result.contractResult result = t.get().getReceipt().getResult();
             if (result == Protocol.Transaction.Result.contractResult.OUT_OF_ENERGY) {
-                logger.info("we have no energy when {}, txId = {}", methodSign, txId);
+                logger.info("we have no energy when {}, txId = {}", args[0], txId);
                 mailService.sendMail("OUT_OF_ENERGY", "Emergency! " +
-                        "\n we have no energy when " + methodSign + ", txId = " + txId);
+                        "\n we have no energy when " + args[0] + ", txId = " + txId);
+            } else if (result == Protocol.Transaction.Result.contractResult.REVERT) {
+                logger.info("we have REVERT when {}, txId = {}", args[0], txId);
+                String timeOut = t.get().getContractResult(0).toStringUtf8();
+                String msg = timeOut != null ? timeOut.substring(68, 116) : null;
+                mailService.sendMail("REVERT", "Emergency! " +
+                        "\n we have REVERT when " + args[0] + ", txId = " + txId
+                        + ", msg: " + msg);
+                if (TIME_OUT_TAG.equals(msg)) {
+                    doRefund();
+                    sendRefund(Integer.valueOf(args[1]));
+                }
             }
         }
     }
@@ -206,12 +249,5 @@ public class ContractTriggerService {
         } else {
             return generateUniqueKey();
         }
-    }
-
-    public static void main(String[] args) {
-        String hello = "7465737400000000000000000000000000000000000000000000000000000000";
-        DataWord word = new DataWord(hello);
-        byte[] encoded = Hash.sha3(word.getData());
-        logger.info("SHA3-256 = {}", Hex.toHexString(encoded));
     }
 }

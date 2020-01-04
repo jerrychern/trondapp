@@ -55,11 +55,11 @@ public class StartRunner implements ApplicationRunner {
                         Thread.sleep(3 * 1000L);
                         break;
                     case 4:
-                        contractService.doLucky();
+                        contractService.doLucky(round);
                         withdraw = 4;
                         break;
                     case 5:
-                        contractService.doJackpot();
+                        contractService.doJackpot(round);
                         withdraw = 5;
                         break;
                     case 6:

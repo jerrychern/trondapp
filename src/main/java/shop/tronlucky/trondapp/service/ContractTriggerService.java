@@ -190,7 +190,7 @@ public class ContractTriggerService {
         int playerCnt = roundPlayersCnt(round);
         int loops = playerCnt / 10;
         for (int i = 0; i <= loops; i++) {
-            String methodSign = "sendRefund(uint128 r, uint256 fromIndex, uint256 loopCnt)";
+            String methodSign = "sendRefund(uint128,uint256,uint256)";
             List<Object> params = new ArrayList<>();
             params.add(round);
             params.add(i * 10);
